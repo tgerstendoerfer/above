@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<credits>
+	<section name="Project Lead">
+		<member>Lukas Kellenberger</member>
+	</section>
+
+	<section name="ABOVE - Engine">
+		<member>Thomas Gerstendörfer</member>
+		<member>Lukas Kellenberger</member>
+		<member>Michael Mühlebach</member>
+	</section>
+
+	<section name="AI Programming">
+		<member>Thomas Gerstendörfer</member>
+		<member>Lukas Kellenberger</member>
+	</section>
+
+	<section name="3D Programming">
+		<member>Michael Mühlebach</member>
+	</section>
+
+	<section name="3D Models">
+		<member>Major A. Payne</member>
+	</section>
+
+	<section name="Cover Artwork">
+		<member>Thomas Gerstendörfer</member>
+	</section>
+
+	<section name="Editors and Tools">
+		<member>Michael Mühlebach</member>
+	</section>
+
+	<section name="Documentation and Manual">
+		<member>Thomas Gerstendörfer</member>
+		<member>Thomas Hellstern</member>
+	</section>
+
+	<section name="Tester">
+		<member>Christoph Meier</member>
+		<member>Stefan Mühlebach</member>
+		<member>Max Hinder</member>
+		<member>Arnaud de Wolf</member>
+	</section>
+
+	<section name="Special Thanks">
+		<member>George Lucas</member>
+		<member>Claude Schwab</member>
+		<member>Craig Reynolds</member>
+		<member>Justin Couch</member>
+		<member>John Wright</member>
+		<member>Christine Mühlebach</member>
+		<member>Hans Kellenberger</member>
+		<member>Ernst Gutknecht</member>
+		<member>Jean-Daniel Tacier</member>
+		<member>Josef A. Huber</member>
+		<member>Rudolf Käser</member>
+	</section>
+</credits>
