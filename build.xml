@@ -242,8 +242,8 @@
       <classpath refid="compile.classpath"/>
       <doctitle><![CDATA[<h1>${app.title} ${app.version} API Documentation</h1>]]></doctitle>
       <bottom><![CDATA[<i><a target="_top" href="${app.web}">${app.title} ${app.version}</a> &#169; 2004 ${vendor.name}.</i>]]></bottom>
-      <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
-      <link href="http://java.sun.com/products/java-media/3D/forDevelopers/J3D_1_3_API/j3dapi/"/>
+      <link href="http://docs.oracle.com/javase/7/docs/api/"/>
+      <link href="http://download.java.net/media/java3d/javadoc/1.5.2/"/>
     </javadoc>
 
 	<!-- Copy documentation files -->
