@@ -131,6 +131,7 @@
 		<mkdir dir="${build.home}/classes"/>
 		<javac srcdir="${src.home}"
 				destdir="${build.home}/classes"
+				includeantruntime="false"
 				debug="${compile.debug}"
 				deprecation="${compile.deprecation}"
 				optimize="${compile.optimize}">
