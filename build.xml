@@ -296,7 +296,7 @@
 		</copy>
 
 		<!-- Create credits data file -->
-		<style
+		<xslt
 			in="${docs.home}/credits.xml"
 			out="${build.home}/classes/credits.dat"
 			style="${docs.home}/creditsdata.xsl"
