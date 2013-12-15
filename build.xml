@@ -1,0 +1,342 @@
+<!--
+	Ant build script to build the ABOVE program.
+-->
+
+<project name="ABOVE" default="compile" basedir=".">
+
+
+
+<!-- ===================== Property Definitions =========================== -->
+<!--
+	Each of the following properties are used in the build script.
+	Values for these properties are set by the first place they are
+	defined, from the following list:
+
+	* Definitions on the "ant" command line (ant -Dfoo=bar compile).
+
+	* Definitions from a "build.properties" file in the top level
+	  source directory of this application.
+
+	* Definitions from a "build.properties" file in the developer's
+	  home directory.
+
+	* Default definitions in this build.xml file.
+
+	You will note below that property values can be composed based on the
+	contents of previously defined properties.  This is a powerful technique
+	that helps you minimize the number of changes required when your development
+	environment is modified.  Note that property composition is allowed within
+	"build.properties" files as well as in the "build.xml" script.
+-->
+	<property file="build.properties"/>
+	<property file="${user.home}/build.properties"/>
+
+
+
+<!-- ==================== File and Directory Names ======================== -->
+	<property name="vendor.name"    value="The ABOVE project team."/>
+	<property name="app.web"        value="https://github.com/tgerstendoerfer/above"/>
+	<property name="app.title"      value="${ant.project.name}"/>
+	<property name="app.name"       value="above"/>
+	<property name="app.path"       value="/${app.name}"/>
+	<property name="build.home"     value="${basedir}/build"/>
+	<property name="dist.home"      value="${basedir}/dist"/>
+	<property name="docs.home"      value="${basedir}/doc"/>
+	<property name="src.home"       value="${basedir}/src"/>
+	<property name="media.home"     value="${basedir}/media"/>
+
+
+
+<!--  ==================== Compilation Control Options ==================== -->
+<!--
+
+	These properties control option settings on the Javac compiler when it
+	is invoked using the <javac> task.
+
+	compile.debug        Should compilation include the debug option?
+	compile.deprecation  Should compilation include the deprecation option?
+	compile.optimize     Should compilation include the optimize option?
+-->
+	<property name="compile.debug"       value="true"/>
+	<property name="compile.deprecation" value="false"/>
+	<property name="compile.optimize"    value="true"/>
+
+
+
+
+<!-- ==================== Compilation Classpath =========================== -->
+<!--
+	Rather than relying on the CLASSPATH environment variable, Ant includes
+	features that makes it easy to dynamically construct the classpath you
+	need for each compilation.  The example below constructs the compile
+	classpath to include the servlet.jar file, as well as the other components
+	that Tomcat makes available to web applications automatically, plus anything
+	that you explicitly added.
+-->
+
+	<path id="compile.classpath">
+		<fileset dir="${basedir}/lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+
+
+<!-- ==================== All Target ====================================== -->
+<!--
+
+  The "all" target is a shortcut for running the "clean" target followed
+  by the "compile" target, to force a complete build.
+
+-->
+
+	<target name="all" depends="clean,zip"
+		description="Clean build and dist directories, then compile and zip">
+		  <touch file="${timestampfile}"/>
+	</target>
+
+
+
+<!-- ==================== Clean Target ==================================== -->
+<!--
+	The "clean" target deletes any previous "build" and "dist" directory,
+	so that you can be ensured the application can be built from scratch.
+-->
+
+	<target name="clean" description="Delete old build and dist directories">
+		<delete file="${timestampfile}"/>
+		<delete dir="${build.home}"/>
+		<delete dir="${dist.home}"/>
+		<delete file="${zipfile}"/>
+		<delete file="download.html"/>
+		<!-- delete old zipfiles - avoids clutter -->
+		<delete>
+			<fileset dir="." includes="${app.name}-*.zip"/>
+		</delete>
+	</target>
+
+
+
+<!-- ==================== Compile Target ================================== -->
+<!--
+	The "compile" target transforms source files (from your "src" directory)
+	into object files in the appropriate location in the build directory.
+	This example assumes that you will be including your classes in an
+	unpacked directory hierarchy under "/WEB-INF/classes".
+-->
+		
+	<target name="compile" depends="prepare" description="Compile Java sources">
+
+		<!-- Compile Java classes as necessary -->
+		<mkdir dir="${build.home}/classes"/>
+		<javac srcdir="${src.home}"
+				destdir="${build.home}/classes"
+				debug="${compile.debug}"
+				deprecation="${compile.deprecation}"
+				optimize="${compile.optimize}">
+			<classpath refid="compile.classpath"/>
+		</javac>
+
+		<!-- Copy application resources -->
+		<copy  todir="${build.home}/classes">
+			<fileset dir="${src.home}" excludes="**/*.java"/>
+		</copy>
+
+	</target>
+		
+
+
+<!-- ==================== Dist Target ===================================== -->
+<!--
+	The "dist" target creates a binary distribution of your application
+	in a directory structure ready to be archived in a tar.gz or zip file.
+	Note that this target depends on two others:
+
+	* "compile" so that the entire web application (including external
+	  dependencies) will have been assembled
+
+	* "javadoc" so that the application Javadocs will have been created
+-->
+
+	<target name="dist" depends="jar,javadoc"
+			description="Create binary distribution">
+
+		<!-- Copy additional files to ${dist.home} as necessary -->
+		<copy file="Readme.txt" todir="${dist.home}">
+			<filterset>
+				<filter token="TITLE" value="${app.title}"/>
+				<filter token="VERSION" value="${app.version}"/>
+				<filter token="JARFILE" value="${distfilebase}.jar"/>
+				<filter token="PROJECTWEB" value="${app.web}"/>
+			</filterset>
+		</copy>
+	</target>
+
+
+
+<!-- ==================== Jar Target ===================================== -->
+<!--
+	The "jar" packages the compiled class files into a nice package
+	representing the application.
+-->
+	<target name="jar" depends="compile"
+			description="Create an application jar file">
+
+		<echo message="${app.title} ${app.version} (${distfilebase})"/>
+		<mkdir dir="${dist.home}"/>
+		<jar jarfile="${jarfile}"
+				basedir="${build.home}/classes">
+			<manifest>
+				<attribute name="Main-Class" value="ABOVE"/>
+				<attribute name="Class-Path" value="StarfireExt.jar"/>
+				<section name="ch/fha/ia02/above/">
+					<attribute name="Specification-Title" value="${app.title}"/>
+					<attribute name="Specification-Version" value="${app.version}"/>
+					<attribute name="Specification-Vendor" value="${vendor.name}"/>
+					<attribute name="Implementation-Title" value="${app.name}"/>
+					<attribute name="Implementation-Version" value="${app.version}"/>
+					<attribute name="Implementation-Vendor" value="${vendor.name}"/>
+				</section>				
+			</manifest>
+		</jar>
+
+		<copy todir="${dist.home}">
+			<fileset dir="${basedir}/lib"/>
+		</copy>
+
+	</target>
+
+
+
+<!-- ==================== Zip Target ===================================== -->
+<!--
+	The "zip" target takes the binary distribution as well as the source
+	files and zips them up into one neat package.
+-->
+
+	<target name="zip" depends="dist"
+			description="Create a zip file for easier distribution">
+
+		<zip destfile="${zipfile}">
+			<zipfileset dir="${dist.home}" prefix="${app.name}"/>
+			<zipfileset dir="${src.home}" prefix="${app.name}/src"/>
+		</zip>
+
+	</target>
+
+
+
+<!-- ==================== Javadoc Target ================================== -->
+
+<!--
+
+  The "javadoc" target creates Javadoc API documentation for the Java
+  classes included in your application.  Normally, this is only required
+  when preparing a distribution release, but is available as a separate
+  target in case the developer wants to create Javadocs independently.
+
+-->
+
+  <target name="javadoc" depends="prepare"
+   description="Create Javadoc API documentation">
+
+    <mkdir          dir="${dist.home}/docs/api"/>
+    <javadoc sourcepath="${src.home}"
+                destdir="${dist.home}/docs/api"
+            windowtitle="${app.title} ${app.version} API Documentation"
+           packagenames="ch.*">
+      <classpath refid="compile.classpath"/>
+      <doctitle><![CDATA[<h1>${app.title} ${app.version} API Documentation</h1>]]></doctitle>
+      <bottom><![CDATA[<i><a target="_top" href="${app.web}">${app.title} ${app.version}</a> &#169; 2004 ${vendor.name}.</i>]]></bottom>
+      <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+      <link href="http://java.sun.com/products/java-media/3D/forDevelopers/J3D_1_3_API/j3dapi/"/>
+    </javadoc>
+
+	<!-- Copy documentation files -->
+	<mkdir dir="${dist.home}/docs"/>
+	<copy todir="${dist.home}/docs">
+		<fileset dir="${docs.home}">
+			<include name="**/*.pdf"/>
+		</fileset>
+	</copy>
+
+  </target>
+
+
+<!-- ==================== Prepare Target ================================== -->
+<!--
+	The "prepare" target is used to create the "build" destination directory,
+	and copy the static contents of your web application to it.  If you need
+	to copy static files from external dependencies, you can customize the
+	contents of this task.
+
+	Normally, this task is executed indirectly when needed.
+-->
+
+	<target name="prepare">
+		<tstamp>
+			<format property="build" pattern="ddMMyyyy.HHmm"/>
+		</tstamp>
+		<property name="app.version-nr" value="1.0"/>
+		<property name="app.version"    value="${app.version-nr}-dev (Build: ${build})"/>
+		<property name="versionsuffix"  value="dev"/>
+		<property name="distfilebase"   value="${app.name}-${versionsuffix}"/>
+		<property name="jarfile"        value="${dist.home}/${distfilebase}.jar"/>
+		<property name="zipfile"        value="${distfilebase}.zip"/>
+		<property name="timestampfile"	value="fullbuild.timestamp"/>
+
+		<!-- first delete the timestamp file to detect partial builds -->
+		<delete file="${timestampfile}"/>
+		
+		<!-- Create build directories as needed -->
+		<mkdir dir="${build.home}"/>
+		<mkdir dir="${build.home}/classes"/>
+
+		<!-- Copy external dependencies as required -->
+		<mkdir dir="${build.home}/classes/media"/>
+		<copy todir="${build.home}/classes/media">
+			<fileset dir="${media.home}">
+				<exclude name="**/*.tga"/>
+				<exclude name="**/*.psd"/>
+			</fileset>
+		</copy>
+
+		<!-- Create credits data file -->
+		<style
+			in="${docs.home}/credits.xml"
+			out="${build.home}/classes/credits.dat"
+			style="${docs.home}/creditsdata.xsl"
+		/>
+		
+	</target>
+
+
+<!-- ==================== Run Target ===================================== -->
+<!--
+	The "run" target launches the application.
+-->
+
+	<target name="run" depends="jar" description="Launches the application.">
+		<java jar="${jarfile}" fork="true"/>
+	</target>
+
+	<target name="viewer" depends="prepare-run" description="Launch the Vessel Viewer.">
+		<java classname="ch.fha.ia02.above.VesselViewer" classpathref="run.classpath" fork="true"/>
+	</target>
+
+	<target name="model-benchmark" depends="prepare-run" description="Benchmarks the model.">
+		<java classname="ch.fha.ia02.above.ModelBenchmark" classpathref="run.classpath" fork="true"/>
+	</target>
+	<target name="vector-benchmark" depends="prepare-run" description="Tests used vector methods in perfomance.">
+		<java classname="ch.fha.ia02.vector.PerformanceTest" classpathref="run.classpath" fork="true"/>
+	</target>
+
+	<target name="prepare-run" depends="jar">
+		<path id="run.classpath">
+			<fileset dir="${dist.home}">
+				<include name="*.jar"/>
+			</fileset>
+		</path>
+	</target>
+
+</project>
