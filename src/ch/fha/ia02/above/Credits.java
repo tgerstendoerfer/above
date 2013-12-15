@@ -161,7 +161,7 @@ public class Credits {
 		dlg.getContentPane().add(new Credits.CreditScreen());
 		dlg.setResizable(false);
 		dlg.pack();
-		dlg.show();
+		dlg.setVisible(true);
 		return dlg;
 	}
 }

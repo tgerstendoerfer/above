@@ -114,7 +114,7 @@ public class ModelInspector extends JPanel
 		w.setTitle(title);
 		w.getContentPane().add(new ModelInspector(model));
 		w.pack();
-		w.show();
+		w.setVisible(true);
 		return w;
 	}
 }

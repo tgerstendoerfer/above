@@ -33,7 +33,7 @@ public class SplashScreen extends AboveFrame {
 		setLocation((screen.width - w)/2, (screen.height - h)/2);
 
 		setForeground(Color.gray);
-		show();
+		setVisible(true);
 	}
 
 	/** Displays a progress message to the user. */

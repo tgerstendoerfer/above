@@ -127,7 +127,7 @@ public class VesselViewer extends ViewerFrame {
 	 * Main entry point for the VesselViewer application
 	 */
 	public static void main(String[] args) {
-		new VesselViewer().show();
+		new VesselViewer().setVisible(true);
 	}
 
 

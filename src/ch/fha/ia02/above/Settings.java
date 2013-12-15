@@ -438,7 +438,7 @@ public class Settings
 		dlg.getContentPane().add(new Settings.SettingsPanel());
 		dlg.setResizable(false);
 		dlg.pack();
-		dlg.show();
+		dlg.setVisible(true);
 		return dlg;
 	}
 }

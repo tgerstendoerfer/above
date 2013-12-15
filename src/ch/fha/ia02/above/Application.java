@@ -159,7 +159,7 @@ public class Application
 		}
 		try {
 			instance().mainFrame = new MainFrame();
-			instance().mainFrame.show();
+			instance().mainFrame.setVisible(true);
 			if (splash != null) splash.dispose();
 			splash = null;
 		}
