@@ -35,7 +35,7 @@
 
 <!-- ==================== File and Directory Names ======================== -->
 	<property name="vendor.name"    value="The ABOVE project team."/>
-	<property name="app.web"        value="https://github.com/tgerstendoerfer/above"/>
+	<property name="app.web"        value="http://tgerstendoerfer.github.io/above"/>
 	<property name="app.title"      value="${ant.project.name}"/>
 	<property name="app.name"       value="above"/>
 	<property name="app.path"       value="/${app.name}"/>
@@ -162,14 +162,7 @@
 			description="Create binary distribution">
 
 		<!-- Copy additional files to ${dist.home} as necessary -->
-		<copy file="Readme.txt" todir="${dist.home}">
-			<filterset>
-				<filter token="TITLE" value="${app.title}"/>
-				<filter token="VERSION" value="${app.version}"/>
-				<filter token="JARFILE" value="${distfilebase}.jar"/>
-				<filter token="PROJECTWEB" value="${app.web}"/>
-			</filterset>
-		</copy>
+		<copy file="Readme.txt" todir="${dist.home}"/>
 	</target>
 
 
