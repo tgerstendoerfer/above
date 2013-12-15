@@ -42,6 +42,7 @@ public class Camera extends TransformGroup
 		view.attachViewPlatform(platform);
 		settingsChange(settings);
 		settings.addSettingsChangeListener(this);
+		addChild(new PerformanceCounter());
 		cb = new CameraBehavior(getCanvas(), this);
 	}
 
