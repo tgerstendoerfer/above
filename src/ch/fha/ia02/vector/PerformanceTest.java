@@ -3,7 +3,6 @@ package ch.fha.ia02.vector;
 import java.io.*;
 import java.util.*;
 import javax.vecmath.*;
-import com.sun.j3d.utils.timer.J3DTimer;
 
 /**
  * Tests used vector methods in perfomance.
@@ -89,7 +88,7 @@ public class PerformanceTest {
 				}
 				fillRandom(u1);
 				fillRandom(u2);
-				start = J3DTimer.getValue();
+				start = System.nanoTime();
 				for(int i=0; i<n; i++) {
 					for(int j=0; j<len; j++) {
 						switch(method) {
@@ -118,7 +117,7 @@ public class PerformanceTest {
 						}
 					}
 				}
-				t[method] = J3DTimer.getValue()-start;
+				t[method] = System.nanoTime()-start;
 			}
 			if (out != null) {
 				for(int i=0; i<t.length; i++) {
