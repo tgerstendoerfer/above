@@ -31,7 +31,7 @@ public class ShapeCache implements SettingsChangeListener
 	private static ShapeCache instance = new ShapeCache();
 
 	/** Stores the actual vessels and shapes. */
-	private Map map = new HashMap();
+	private Map<Vessel, SharedGroup> map = new HashMap<Vessel, SharedGroup>();
 
 	/**
 	 * Specifies if textures should be loaded.
@@ -85,8 +85,8 @@ public class ShapeCache implements SettingsChangeListener
 	 *         or <tt>null</tt> if no shape is available.
 	 */
 	public static SharedGroup getShape(Vessel v) {
-		Object o = instance.map.get(v);
-		return o == null ? instance.loadShape(v) : (SharedGroup)o;
+		SharedGroup shape = instance.map.get(v);
+		return shape == null ? instance.loadShape(v) : shape;
 	}
 
 
@@ -94,11 +94,11 @@ public class ShapeCache implements SettingsChangeListener
 	 * Loads all shapes for all vessels.
 	 */
 	public static void loadShapes() {
-		Iterator it = instance.map.entrySet().iterator();
+		Iterator<Map.Entry<Vessel, SharedGroup>> it = instance.map.entrySet().iterator();
 		while (it.hasNext()) {
-			Map.Entry entry = (Map.Entry)it.next();
+			Map.Entry<Vessel, SharedGroup> entry = it.next();
 			if (entry.getValue() == null) {
-				instance.loadShape((Vessel)entry.getKey());
+				instance.loadShape(entry.getKey());
 			}
 		}
 	}
@@ -226,9 +226,9 @@ public class ShapeCache implements SettingsChangeListener
 	 * Removes all prevoiusly loaded shapes from the cache.
 	 */
 	public static void invalidateShapes() {
-		Iterator it = instance.map.entrySet().iterator();
+		Iterator<Map.Entry<Vessel, SharedGroup>> it = instance.map.entrySet().iterator();
 		while (it.hasNext()) {
-			((Map.Entry)it.next()).setValue(null);
+			it.next().setValue(null);
 		}
 	}
 

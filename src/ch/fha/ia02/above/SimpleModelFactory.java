@@ -15,13 +15,13 @@ public class SimpleModelFactory implements ModelFactory
 	/** The number of starfighters per squadron. */
 	int nFighters = 12;
 
-	private Set objects;
+	private Set<ViewObject> objects;
 	private Random r = new Random();
 
 	public Model createModel() {
 
 		r.setSeed(2000); // restart the random generator
-		objects = new HashSet();
+		objects = new HashSet<ViewObject>();
 
 		Vector3f v = new Vector3f();
 		Vector3f p = new Vector3f();

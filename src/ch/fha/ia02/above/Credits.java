@@ -17,7 +17,7 @@ public class Credits {
 	private static final String TITLE = "About ABOVE";
 	private static final String CREDITS = "/credits.dat";
 	private static Credits my;
-	private java.util.List credits = new java.util.LinkedList();
+	private java.util.List<Object> credits = new java.util.LinkedList<Object>();
 
 	/**
 	 * Stand for a credit category which has a name and
@@ -25,7 +25,7 @@ public class Credits {
 	 */
 	private static class Category {
 		public String name;
-		public java.util.List members = new java.util.LinkedList();
+		public java.util.List<String> members = new java.util.LinkedList<String>();
 	}
 
 	/**
@@ -114,9 +114,9 @@ public class Credits {
 							int x = m - g.getFontMetrics().stringWidth(el.name);
 							g.drawString(el.name, x - 10, a);
 
-							java.util.Iterator itt = el.members.iterator();
+							java.util.Iterator<String> itt = el.members.iterator();
 							while (itt.hasNext()) {
-								String subname = (String)itt.next();
+								String subname = itt.next();
 								g.drawString(subname, m + 10, a);
 
 								a += linespace;

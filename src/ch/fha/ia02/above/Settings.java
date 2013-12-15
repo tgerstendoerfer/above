@@ -17,7 +17,7 @@ public class Settings
 {
 	private Preferences prefs;
 	private boolean dirty = false;
-	private java.util.List changeListeners = new ArrayList();
+	private java.util.List<SettingsChangeListener> changeListeners = new ArrayList<SettingsChangeListener>();
 
 	/**
 	 * Creates and initializes this settings object.
@@ -56,10 +56,10 @@ public class Settings
 	 * @see SettingsChangeListener
 	 */
 	protected final void fireSettingsChange() {
-		Iterator it = changeListeners.iterator();
+		Iterator<SettingsChangeListener> it = changeListeners.iterator();
 		while (it.hasNext()) {
 			try {
-				((SettingsChangeListener)it.next()).settingsChange(this);
+				it.next().settingsChange(this);
 			}
 			catch (Exception e) {
 				e.printStackTrace();

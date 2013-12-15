@@ -90,7 +90,7 @@ public class Model {
 	 *         object that cannot be casted to <tt>ViewObject</tt>.
 	 * @throws IllegalArgumentException if a consistency check fails.
 	 */
-	public Model(Set viewObjects) {
+	public Model(Set<ViewObject> viewObjects) {
 		init(viewObjects);
 
 		if (Application.getSettings().useTimeTrigger()) {
@@ -115,13 +115,13 @@ public class Model {
 	 * @param viewObjects a set of {@link ViewObject} instances
 	 *        with each representing an agent in the model.
 	 */
-	private void init(Set viewObjects) {
+	private void init(Set<ViewObject> viewObjects) {
 		// copy the objects from the list to
 		// an array for performance reasons
 		agents = new Agent[viewObjects.size()];
-		Iterator it = viewObjects.iterator();
+		Iterator<ViewObject> it = viewObjects.iterator();
 		for (int i=0; i<agents.length; i++) {
-			ViewObject vObj = (ViewObject)it.next();
+			ViewObject vObj = it.next();
 			agents[i] = vObj.getAgent();;
 			agents[i].validate();
 			modelGroup.addChild(vObj);
