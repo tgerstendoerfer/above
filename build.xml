@@ -92,7 +92,6 @@
 
 	<target name="all" depends="clean,zip"
 		description="Clean build and dist directories, then compile and zip">
-		  <touch file="${timestampfile}"/>
 	</target>
 
 
@@ -104,7 +103,6 @@
 -->
 
 	<target name="clean" description="Delete old build and dist directories">
-		<delete file="${timestampfile}"/>
 		<delete dir="${build.home}"/>
 		<delete dir="${dist.home}"/>
 		<delete file="${zipfile}"/>
@@ -277,10 +275,6 @@
 		<property name="distfilebase"   value="${app.name}-${versionsuffix}"/>
 		<property name="jarfile"        value="${dist.home}/${distfilebase}.jar"/>
 		<property name="zipfile"        value="${distfilebase}.zip"/>
-		<property name="timestampfile"	value="fullbuild.timestamp"/>
-
-		<!-- first delete the timestamp file to detect partial builds -->
-		<delete file="${timestampfile}"/>
 		
 		<!-- Create build directories as needed -->
 		<mkdir dir="${build.home}"/>
